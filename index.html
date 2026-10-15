@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#101412" />
+    <meta
+      name="description"
+      content="Know your attendance buffer. Plan your next few weeks. A local-first attendance planner for students."
+    />
+    <title>AttendX - Make every class count</title>
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="math.js" defer></script>
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="AttendX home"
+        ><span class="brand-icon">a<span>×</span></span
+        >Attend<span class="accent">X</span></a
+      >
+      <nav aria-label="Main">
+        <a href="#subjects">Dashboard</a
+        ><a href="#planner">Simulator <span>↗</span></a>
+      </nav>
+      <div class="local-badge"><span class="dot"></span> On this device</div>
+    </header>
+    <main>
+      <section class="hero">
+        <div>
+          <p class="eyebrow">
+            <span class="line"></span> LESS GUESSING. MORE LIVING.
+          </p>
+          <h1>Make every<br />class <span>count.</span></h1>
+          <p class="intro">
+            Your attendance rule, without the mental math.<br />Know when to
+            show up. Know your breathing room.
+          </p>
+          <div class="hero-actions">
+            <button id="add-subject" class="primary">＋ Add a subject</button
+            ><a class="text-link" href="#planner">Plan a few weeks ahead ↗</a>
+          </div>
+        </div>
+        <div class="hero-visual" aria-label="Your attendance target">
+          <span class="orbit orbit-one"></span
+          ><span class="orbit orbit-two"></span>
+          <div class="target">
+            <span class="eyebrow">THE SWEET SPOT</span
+            ><strong><span id="hero-target">75</span><span>%</span></strong
+            ><span>minimum attendance</span>
+          </div>
+          <span class="float-label">↑ A little planning goes a long way</span>
+        </div>
+      </section>
+      <div id="demo-banner" class="notice">
+        <span
+          ><span class="notice-mark">i</span>
+          <strong>Start with a little inspiration.</strong> These are sample
+          subjects, not your records.</span
+        ><button id="start-fresh">Start fresh ↗</button>
+      </div>
+      <section class="target-settings">
+        <label for="required"
+          >Your required attendance
+          <input
+            id="required"
+            type="number"
+            min="1"
+            max="100"
+            step="1"
+            value="75"
+          />
+          %</label
+        ><span>Set your school's rule. Applies to every subject.</span>
+      </section>
+      <section class="stats" aria-label="Attendance overview">
+        <div>
+          <span class="stat-label">SUBJECTS TRACKED</span
+          ><strong id="stat-count">0</strong
+          ><span>one rule, every subject</span>
+        </div>
+        <div>
+          <span class="stat-label">ON TRACK</span
+          ><strong id="stat-safe">0<span class="unit"> / 0</span></strong
+          ><span>at or above your target</span>
+        </div>
+        <div>
+          <span class="stat-label">NEED ATTENTION</span
+          ><strong id="stat-danger">0</strong
+          ><span>let's get them back on track</span>
+        </div>
+        <div class="stat-note">
+          <span class="spark">✳</span>
+          <p>
+            Attendance is checked<br /><strong>subject by subject.</strong
+            ><br />One average can't save you.
+          </p>
+        </div>
+      </section>
+      <section id="subjects" class="section">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">YOUR DAILY CHECK-IN</p>
+            <h2>The roll call<span>.</span></h2>
+          </div>
+          <div class="legend">
+            <span><i class="safe-dot"></i> Safe</span
+            ><span><i class="warning-dot"></i> Tight</span
+            ><span><i class="danger-dot"></i> Catch up</span>
+          </div>
+        </div>
+        <div id="subject-grid" class="subject-grid"></div>
+        <p class="small-note">
+          Safe = 2+ misses left · Tight = 0–1 misses left · Catch up = below
+          75%. Counts use exact fractions, not rounded percentages.
+        </p>
+      </section>
+      <section id="planner" class="planner section">
+        <div class="planner-intro">
+          <p class="eyebrow">TRY IT BEFORE YOU SKIP IT</p>
+          <h2>Your next move, <br />minus the guesswork<span>.</span></h2>
+          <p>
+            Set classes per week and planned skips for each subject. Compare
+            your plan with attending every class.
+          </p>
+          <label class="weeks-label" for="weeks"
+            >Look ahead
+            <select id="weeks">
+              <option value="1">1 week</option>
+              <option value="2">2 weeks</option>
+              <option value="4" selected>4 weeks</option>
+              <option value="6">6 weeks</option>
+              <option value="8">8 weeks</option>
+              <option value="12">12 weeks</option>
+              <option value="16">16 weeks</option>
+            </select></label
+          >
+          <div class="plan-key">
+            <span><i class="safe-dot"></i> Attend all</span
+            ><span><i class="plan-dot"></i> Your plan</span>
+          </div>
+          <p class="small-note">
+            A what-if, not a promise. Assumes the same weekly schedule, no
+            holidays or cancelled classes, and that every planned class takes
+            place. Projections don't change your records.
+          </p>
+        </div>
+        <div class="plan-results">
+          <div id="plan-rows"></div>
+          <div id="plan-summary" class="plan-summary"></div>
+        </div>
+      </section>
+      <section class="bottom-strip">
+        <div>
+          <strong>Your data stays with you.</strong>
+          <p>No login. No server. Export a backup before switching devices.</p>
+        </div>
+        <div class="backup-actions">
+          <button id="export" class="secondary">↓ Export JSON</button
+          ><button id="import" class="secondary">↑ Import backup</button
+          ><input
+            id="import-file"
+            type="file"
+            accept="application/json,.json"
+            hidden
+          />
+        </div>
+      </section>
+      <p id="storage-warning" class="error" hidden></p>
+      <footer>
+        <a class="brand" href="#">Attend<span class="accent">X</span></a>
+        <p>Built for the attendance balancing act.</p>
+        <span
+          >Independent student project. Not an official school service.<br />Check
+          your school's current rules and official records.</span
+        >
+      </footer>
+    </main>
+    <dialog id="subject-dialog">
+      <form id="subject-form">
+        <div class="dialog-heading">
+          <h2 id="dialog-title">New subject</h2>
+          <button
+            type="button"
+            id="close-dialog"
+            class="icon-button"
+            aria-label="Close"
+          >
+            ×
+          </button>
+        </div>
+        <p class="muted">Start with the counts from your official record.</p>
+        <label
+          >Subject name<input
+            id="subject-name"
+            maxlength="60"
+            required
+            placeholder="e.g. Engineering Mathematics"
+        /></label>
+        <div class="form-grid">
+          <label
+            >Classes attended<input
+              id="attended"
+              type="number"
+              min="0"
+              max="100000"
+              step="1"
+              required
+              value="0" /></label
+          ><label
+            >Total classes held<input
+              id="total"
+              type="number"
+              min="0"
+              max="100000"
+              step="1"
+              required
+              value="0"
+          /></label>
+        </div>
+        <label
+          >Classes per week<input
+            id="weekly"
+            type="number"
+            min="0"
+            max="30"
+            step="1"
+            value="3"
+            required
+        /></label>
+        <p id="form-error" class="error" role="alert"></p>
+        <button class="primary" type="submit">Save subject ↗</button>
+      </form>
+    </dialog>
+    <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+  </body>
+</html>
